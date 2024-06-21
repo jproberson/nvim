@@ -1,0 +1,59 @@
+
+# Ignore compiled files
+*.pyc
+*.o
+*.so
+
+# Ignore swap files
+*.swp
+*.swo
+
+# Ignore backup files
+*.bak
+*.tmp
+*.temp
+
+# Ignore undo files
+*.un~
+
+# Ignore session files
+Session.vim
+*.ses
+
+# Ignore tag files
+tags
+.tags
+
+# Ignore log files
+*.log
+
+# Ignore Node modules
+node_modules/
+
+# Ignore specific plugins or tools
+plugged/
+pack/
+site/
+bundle/
+
+# Ignore generated files by plugins
+plugged/**/node_modules/
+plugged/**/.cache/
+plugged/**/build/
+plugged/**/dist/
+plugged/**/target/
+plugged/**/out/
+plugged/**/tmp/
+
+# Ignore temporary files created by vim
+**/*.un~
+**/*.sw?
+**/*.tmp
+**/*.bak
+
+# Ignore viminfo files
+.viminfo
+.viminfo-*
+
+# Ignore Neovim metadata
+shada/main.shada
