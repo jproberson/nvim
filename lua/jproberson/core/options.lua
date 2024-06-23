@@ -47,7 +47,7 @@ opt.splitbelow = true -- split horizontal window to the bottom
 -- turn off swapfile
 opt.swapfile = false
 
-opt.mouse = 'a'
+opt.mouse = "a"
 -- Enable break indent
 opt.breakindent = true
 
@@ -61,7 +61,7 @@ opt.timeoutlen = 300
 -- Sets how neovim will display certain whitespace in the editor.
 --  See `:help 'list'`
 --  and `:help 'listchars'`
-opt.list = true
+-- opt.list = true
 -- opt.listchars = {
 -- tab = '» ',
 -- trail = '·',
@@ -69,7 +69,7 @@ opt.list = true
 -- }
 
 -- Preview substitutions live, as you type!
-opt.inccommand = 'split'
+opt.inccommand = "split"
 
 -- Minimal number of screen lines to keep above and below the cursor.
 opt.scrolloff = 10
@@ -79,12 +79,12 @@ opt.scrolloff = 10
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
 --  See `:help vim.highlight.on_yank()`
-vim.api.nvim_create_autocmd('TextYankPost', {
-    desc = 'Highlight when yanking (copying) text',
-    group = vim.api.nvim_create_augroup('kickstart-highlight-yank', {
-        clear = true
-    }),
-    callback = function()
-        vim.highlight.on_yank()
-    end
+vim.api.nvim_create_autocmd("TextYankPost", {
+	desc = "Highlight when yanking (copying) text",
+	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", {
+		clear = true,
+	}),
+	callback = function()
+		vim.highlight.on_yank()
+	end,
 })
