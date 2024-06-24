@@ -30,7 +30,7 @@ keymap.set("i", "jk", "<ESC>", {
 
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
 vim.opt.hlsearch = true
-keymap.set("n", "<leader>/", ":nohl<CR>", {
+keymap.set("n", "<leader>n", ":nohl<CR>", {
 	desc = "Clear search highlights",
 })
 
