@@ -57,3 +57,5 @@ plugged/**/tmp/
 
 # Ignore Neovim metadata
 shada/main.shada
+
+lazy-lock.json
