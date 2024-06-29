@@ -54,6 +54,10 @@ return { -- Useful plugin to show you pending keybinds.
 				name = "[L]azy",
 				_ = "which_key_ignore",
 			},
+			["<leader>x"] = {
+				name = "Trouble keys",
+				_ = "which_key_ignore",
+			},
 			["<leader>1"] = "which_key_ignore",
 			["<leader>2"] = "which_key_ignore",
 			["<leader>3"] = "which_key_ignore",
