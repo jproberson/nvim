@@ -43,9 +43,6 @@ keymap.set("n", "<C-d>", "<C-d>zz", {
 keymap.set("n", "<C-u>", "<C-u>zz", {
 	desc = "Page up and center",
 })
-keymap.set("n", "<leader>pv", vim.cmd.Ex, {
-	desc = "Open Ex mode",
-})
 keymap.set("v", "J", ":m '>+1<CR>gv=gv", {
 	desc = "Move text block down",
 })
@@ -101,3 +98,10 @@ keymap.set("n", "<C-j>", "<C-w><C-j>", {
 keymap.set("n", "<C-k>", "<C-w><C-k>", {
 	desc = "Move focus to the upper window",
 })
+keymap.set("n", "<leader>S", ":source %<CR>", {
+	silent = true,
+	desc = "Source current file",
+})
+
+keymap.set("n", "<leader>ll", "<cmd>Lazy<CR>", { desc = "Lazy" })
+keymap.set("n", "<leader>ld", "<cmd>LazyDocker<CR>", { desc = "LazyDocker", noremap = true, silent = true })

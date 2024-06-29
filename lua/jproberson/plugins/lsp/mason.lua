@@ -35,6 +35,7 @@ return {
 				"pyright",
 				"dockerls",
 				"jsonls",
+				-- "vale_ls",
 			},
 		})
 
@@ -46,6 +47,7 @@ return {
 				-- "black", -- python formatter
 				-- "pylint", -- python linter
 				"eslint_d", -- js linter
+				-- "vale",
 			},
 		})
 	end,

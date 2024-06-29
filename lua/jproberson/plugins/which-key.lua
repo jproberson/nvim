@@ -31,7 +31,7 @@ return { -- Useful plugin to show you pending keybinds.
 				_ = "which_key_ignore",
 			},
 			["<leader>t"] = {
-				name = "[T]oggle",
+				name = "[T]abs",
 				_ = "which_key_ignore",
 			},
 			["<leader>M"] = {
@@ -40,6 +40,18 @@ return { -- Useful plugin to show you pending keybinds.
 			},
 			["<leader>E"] = {
 				name = "[E]xplore splits",
+				_ = "which_key_ignore",
+			},
+			["<leader>f"] = {
+				name = "[F]ormat",
+				_ = "which_key_ignore",
+			},
+			["<leader>h"] = {
+				name = "Git",
+				_ = "which_key_ignore",
+			},
+			["<leader>l"] = {
+				name = "[L]azy",
 				_ = "which_key_ignore",
 			},
 			["<leader>1"] = "which_key_ignore",
