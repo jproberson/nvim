@@ -1,7 +1,7 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-local keymap = vim.keymap -- for conciseness
+local keymap = vim.keymap
 
 keymap.set("n", "<leader>e", ":Explore<CR>", {
 	noremap = true,
@@ -55,7 +55,7 @@ keymap.set("v", "K", ":m '<-2<CR>gv=gv", {
 keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle, {
 	desc = "Toggle undo tree",
 })
-
+--
 -- delete single character without copying into register
 -- keymap.set("n", "x", '"_x')
 
