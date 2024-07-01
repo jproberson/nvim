@@ -12,6 +12,8 @@ g~ = Toggle case
 gu = lower case
 gU = upper case
 gv = reselect last visual selection
+`. = Location of last change
+`^ = Location of last insertion
 
 Insert mode:
 <C-w> = delete word
@@ -29,4 +31,9 @@ Windows:
 :on[ly] = <C-w>o = close all other windows
 
 Saving in nvim with root:
-:w !sudo tee
+:w !sudo te
+
+---
+
+As a general rule, we could say that the `d{motion}` command tends to work
+well with `aw`,`as`, and `ap`, whereas the `c{motion}`command works better with`iw` and similar.

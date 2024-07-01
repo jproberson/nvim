@@ -34,8 +34,8 @@ return { -- Useful plugin to show you pending keybinds.
 				name = "[T]abs",
 				_ = "which_key_ignore",
 			},
-			["<leader>M"] = {
-				name = "Markdown preview",
+			["<leader>p"] = {
+				name = "[P]review",
 				_ = "which_key_ignore",
 			},
 			["<leader>E"] = {
