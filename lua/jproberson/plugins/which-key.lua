@@ -1,68 +1,42 @@
-return { -- Useful plugin to show you pending keybinds.
+return {
 	"folke/which-key.nvim",
-	event = "VimEnter", -- Sets the loading event to 'VimEnter'
-	config = function() -- This is the function that runs, AFTER loading
+	event = "VimEnter",
+	config = function()
 		require("which-key").setup()
 
-		-- Document existing key chains
-		require("which-key").register({
-			["<leader>c"] = {
-				name = "[C]ode",
-				_ = "which_key_ignore",
-			},
-			["<leader>d"] = {
-				name = "[D]ocument",
-				_ = "which_key_ignore",
-			},
-			["<leader>r"] = {
-				name = "[R]ename",
-				_ = "which_key_ignore",
-			},
-			["<leader>s"] = {
-				name = "[S]earch",
-				_ = "which_key_ignore",
-			},
-			["<leader>w"] = {
-				name = "[W]orkspace",
-				_ = "which_key_ignore",
-			},
-			["<leader>o"] = {
-				name = "[O]bsidian",
-				_ = "which_key_ignore",
-			},
-			["<leader>t"] = {
-				name = "[T]abs",
-				_ = "which_key_ignore",
-			},
-			["<leader>p"] = {
-				name = "[P]review",
-				_ = "which_key_ignore",
-			},
-			["<leader>E"] = {
-				name = "[E]xplore splits",
-				_ = "which_key_ignore",
-			},
-			["<leader>f"] = {
-				name = "[F]ormat",
-				_ = "which_key_ignore",
-			},
-			["<leader>h"] = {
-				name = "Git",
-				_ = "which_key_ignore",
-			},
-			["<leader>l"] = {
-				name = "[L]azy",
-				_ = "which_key_ignore",
-			},
-			["<leader>x"] = {
-				name = "Trouble keys",
-				_ = "which_key_ignore",
-			},
-			["<leader>1"] = "which_key_ignore",
-			["<leader>2"] = "which_key_ignore",
-			["<leader>3"] = "which_key_ignore",
-			["<leader>4"] = "which_key_ignore",
-			["<leader>5"] = "which_key_ignore",
+		local wk = require("which-key")
+		wk.add({
+			{ "<leader>1", hidden = true },
+			{ "<leader>2", hidden = true },
+			{ "<leader>3", hidden = true },
+			{ "<leader>4", hidden = true },
+			{ "<leader>5", hidden = true },
+			{ "<leader>E", group = "[E]xplore splits" },
+			{ "<leader>E_", hidden = true },
+			{ "<leader>c", group = "[C]ode" },
+			{ "<leader>c_", hidden = true },
+			{ "<leader>d", group = "[D]ocument" },
+			{ "<leader>d_", hidden = true },
+			{ "<leader>f", group = "[F]ormat" },
+			{ "<leader>f_", hidden = true },
+			{ "<leader>h", group = "Git" },
+			{ "<leader>h_", hidden = true },
+			{ "<leader>l", group = "[L]azy" },
+			{ "<leader>l_", hidden = true },
+			{ "<leader>o", group = "[O]bsidian" },
+			{ "<leader>o_", hidden = true },
+			{ "<leader>p", group = "[P]review" },
+			{ "<leader>p_", hidden = true },
+			{ "<leader>r", group = "[R]ename" },
+			{ "<leader>r_", hidden = true },
+			{ "<leader>s", group = "[S]earch" },
+			{ "<leader>s_", hidden = true },
+			{ "<leader>t", group = "[T]abs" },
+			{ "<leader>t_", hidden = true },
+			{ "<leader>w", group = "[W]orkspace" },
+			{ "<leader>w_", hidden = true },
+			{ "<leader>x", group = "Trouble keys" },
+			{ "<leader>x_", hidden = true },
 		})
 	end,
 }

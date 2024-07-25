@@ -1,5 +1,7 @@
 # nvim
 
+120 - (145/328)
+
 Useful default vim things I didn't know about:
 
 :ls = list buffers
