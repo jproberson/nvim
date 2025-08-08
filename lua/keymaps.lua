@@ -62,8 +62,14 @@ vim.keymap.set('v', '<S-A-Up>', ":m '<-2<CR>gv=gv", { noremap = true, silent = t
 vim.keymap.set('v', '<A-K>', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
 
 -- CENTERING SEARCH RESULTS & SCROLLING
+-- Ctrl-d / Ctrl-u
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
 vim.keymap.set('n', '<C-u>', '<C-u>zz')
+
+-- Cmd-d / Cmd-u (macOS Command key)
+vim.keymap.set('n', '<D-d>', '<C-d>zz')
+vim.keymap.set('n', '<D-u>', '<C-u>zz')
+
 vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', 'N', 'Nzzzv')
 
