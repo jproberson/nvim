@@ -19,7 +19,15 @@ return {
       -- Automatically install LSPs and related tools to stdpath for Neovim
       -- Mason must be loaded before its dependents so we need to set it up here.
       -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
-      { 'mason-org/mason.nvim', opts = {} },
+      {
+        'mason-org/mason.nvim',
+        opts = {
+          registries = {
+            'github:mason-org/mason-registry',
+            'github:Crashdummyy/mason-registry', -- exposes `roslyn`
+          },
+        },
+      },
       'mason-org/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
@@ -59,106 +67,122 @@ return {
       --    That is to say, every time a new file is opened that is associated with
       --    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
       --    function will be executed to configure the current buffer
+      -- LSP attach: LazyVim-style keymaps
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
-          -- NOTE: Remember that Lua is a real programming language, and as such it is possible
-          -- to define small helper and utility functions so you don't have to repeat yourself.
-          --
-          -- In this case, we create a function that lets us more easily define mappings specific
-          -- for LSP related items. It sets the mode, buffer and description for us each time.
-          local map = function(keys, func, desc, mode)
+          local tb = require 'telescope.builtin'
+
+          local function map(keys, fn, desc, mode)
             mode = mode or 'n'
-            vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
+            vim.keymap.set(mode, keys, fn, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
 
-          -- Rename the variable under your cursor.
-          --  Most Language Servers support renaming across files, etc.
-          map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
+          -- LazyVim-like LSP keymaps
+          map('<leader>cl', function()
+            vim.cmd 'LspInfo'
+          end, 'Lsp Info')
+          map('gd', tb.lsp_definitions, 'Goto Definition')
+          map('gr', tb.lsp_references, 'References')
+          map('gI', tb.lsp_implementations, 'Goto Implementation')
+          map('gy', tb.lsp_type_definitions, 'Goto Type Definition')
+          map('gD', vim.lsp.buf.declaration, 'Goto Declaration')
+          map('K', vim.lsp.buf.hover, 'Hover')
+          map('gK', vim.lsp.buf.signature_help, 'Signature Help')
+          vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, { buffer = event.buf, desc = 'LSP: Signature Help' })
+          map('<leader>ca', vim.lsp.buf.code_action, 'Code Action', { 'n', 'v' })
+          map('<leader>cr', vim.lsp.buf.rename, 'Rename')
+          map('<leader>cA', function()
+            vim.lsp.buf.code_action { context = { only = { 'source' }, diagnostics = {} } }
+          end, 'Source Action')
 
-          -- Execute a code action, usually your cursor needs to be on top of an error
-          -- or a suggestion from your LSP for this to activate.
-          map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
-
-          -- Find references for the word under your cursor.
-          map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-
-          -- Jump to the implementation of the word under your cursor.
-          --  Useful when your language has ways of declaring types without an actual implementation.
-          map('gri', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-
-          -- Jump to the definition of the word under your cursor.
-          --  This is where a variable was first declared, or where a function is defined, etc.
-          --  To jump back, press <C-t>.
-          map('grd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-
-          -- WARN: This is not Goto Definition, this is Goto Declaration.
-          --  For example, in C this would take you to the header.
-          map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-
-          -- Fuzzy find all the symbols in your current document.
-          --  Symbols are things like variables, functions, types, etc.
-          map('gO', require('telescope.builtin').lsp_document_symbols, 'Open Document Symbols')
-
-          -- Fuzzy find all the symbols in your current workspace.
-          --  Similar to document symbols, except searches over your entire project.
-          map('gW', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Open Workspace Symbols')
-
-          -- Jump to the type of the word under your cursor.
-          --  Useful when you're not sure what type a variable is and you want to see
-          --  the definition of its *type*, not where it was *defined*.
-          map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
-
-          -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
-          ---@param client vim.lsp.Client
-          ---@param method vim.lsp.protocol.Method
-          ---@param bufnr? integer some lsp support methods only in specific files
-          ---@return boolean
-          local function client_supports_method(client, method, bufnr)
+          -- CodeLens (if supported)
+          local client = vim.lsp.get_client_by_id(event.data.client_id)
+          local function supports(method)
+            if not client then
+              return false
+            end
             if vim.fn.has 'nvim-0.11' == 1 then
-              return client:supports_method(method, bufnr)
+              return client:supports_method(method, event.buf)
             else
-              return client.supports_method(method, { bufnr = bufnr })
+              return client.supports_method and client.supports_method(method, { bufnr = event.buf })
             end
           end
+          if supports(vim.lsp.protocol.Methods.textDocument_codeLens) and vim.lsp.codelens then
+            map('<leader>cc', vim.lsp.codelens.run, 'Run Codelens', { 'n', 'v' })
+            map('<leader>cC', vim.lsp.codelens.refresh, 'Refresh & Display Codelens')
+            vim.lsp.codelens.refresh()
+          end
 
-          -- The following two autocommands are used to highlight references of the
-          -- word under your cursor when your cursor rests there for a little while.
-          --    See `:help CursorHold` for information about when this is executed
-          --
-          -- When you move your cursor, the highlights will be cleared (the second autocommand).
-          local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
+          -- Document highlight (same behavior you had)
+          if supports(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
               buffer = event.buf,
               group = highlight_augroup,
               callback = vim.lsp.buf.document_highlight,
             })
-
             vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
               buffer = event.buf,
               group = highlight_augroup,
               callback = vim.lsp.buf.clear_references,
             })
-
             vim.api.nvim_create_autocmd('LspDetach', {
               group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
-              callback = function(event2)
+              callback = function(ev)
                 vim.lsp.buf.clear_references()
-                vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
+                vim.api.nvim_clear_autocmds { group = highlight_augroup, buffer = ev.buf }
               end,
             })
           end
 
-          -- The following code creates a keymap to toggle inlay hints in your
-          -- code, if the language server you are using supports them
-          --
-          -- This may be unwanted, since they displace some of your code
-          if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
+          -- Inlay hints toggle
+          if supports(vim.lsp.protocol.Methods.textDocument_inlayHint) and vim.lsp.inlay_hint then
             map('<leader>th', function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-            end, '[T]oggle Inlay [H]ints')
+            end, 'Toggle Inlay Hints')
+          end
+
+          -- LazyVim-style "Rename File" (uses LSP file ops when available)
+          local function rename_file()
+            local old = vim.api.nvim_buf_get_name(0)
+            vim.ui.input({ prompt = 'New path: ', default = old }, function(new)
+              if not new or new == '' or new == old then
+                return
+              end
+              local params = { files = { { oldUri = vim.uri_from_fname(old), newUri = vim.uri_from_fname(new) } } }
+              for _, cli in pairs(vim.lsp.get_clients { bufnr = event.buf }) do
+                local ok1 = cli.supports_method and cli:supports_method 'workspace/willRenameFiles'
+                local ok2 = cli.supports_method and cli.supports_method('workspace/willRenameFiles', { bufnr = event.buf })
+                if ok1 or ok2 then
+                  local resp = cli.request_sync and cli.request_sync('workspace/willRenameFiles', params, 1000, event.buf)
+                  if resp and resp.result then
+                    vim.lsp.util.apply_workspace_edit(resp.result, cli.offset_encoding)
+                  end
+                end
+              end
+              vim.fn.mkdir(vim.fn.fnamemodify(new, ':h'), 'p')
+              os.rename(old, new)
+              vim.cmd.edit(vim.fn.fnameescape(new))
+            end)
+          end
+          map('<leader>cR', rename_file, 'Rename File')
+
+          -- Optional: next/prev reference (if RRethy/vim-illuminate is installed)
+          local ok, illuminate = pcall(require, 'illuminate')
+          if ok then
+            map(']]', function()
+              illuminate.goto_next_reference(true)
+            end, 'Next Reference')
+            map('[[', function()
+              illuminate.goto_prev_reference(true)
+            end, 'Prev Reference')
+            vim.keymap.set('n', '<A-n>', function()
+              illuminate.goto_next_reference(true)
+            end, { buffer = event.buf, desc = 'LSP: Next Reference' })
+            vim.keymap.set('n', '<A-p>', function()
+              illuminate.goto_prev_reference(true)
+            end, { buffer = event.buf, desc = 'LSP: Prev Reference' })
           end
         end,
       })
