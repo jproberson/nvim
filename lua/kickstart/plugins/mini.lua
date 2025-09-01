@@ -1,13 +1,8 @@
 return {
-  { -- Collection of various small independent plugins/modules
+  {
     'echasnovski/mini.nvim',
     config = function()
-      -- Better Around/Inside textobjects
-      --
-      -- Examples:
-      --  - va)  - [V]isually select [A]round [)]paren
-      --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
-      --  - ci'  - [C]hange [I]nside [']quote
+      -- your existing mini configs
       require('mini.ai').setup { n_lines = 500 }
 
       -- Add/delete/replace surroundings (brackets, quotes, etc.)
@@ -34,8 +29,69 @@ return {
 
       require('mini.bracketed').setup()
 
-      --  Check out: https://github.com/echasnovski/mini.nvim
+      -- nice base diff opts (independent of mini.diff)
+      vim.opt.diffopt:append { 'linematch:60', 'algorithm:histogram', 'indent-heuristic' }
+
+      -- >>> FIXED: put style/signs/priority inside `view`
+      local mini_diff = require 'mini.diff'
+      mini_diff.setup {
+        view = {
+          style = 'number', -- avoid gitsigns conflicts
+          signs = { add = '▒', change = '▒', delete = '▒' },
+          priority = 199,
+        },
+        -- you could also set options = { algorithm = "histogram", indent_heuristic = true, linematch = 60 }
+      }
+
+      -- Toggle the overlay (unchanged)
+      vim.keymap.set('n', '<leader>go', function()
+        if not vim.wo.number and not vim.wo.relativenumber then
+          vim.wo.number = true
+        end
+        mini_diff.toggle_overlay(0)
+      end, { desc = 'MiniDiff: Toggle overlay' })
+
+      -- Robust signs toggle that does NOT rely on Snacks being present
+      local function mini_diff_is_enabled(bufnr)
+        -- When enabled, mini.diff populates buffer variables (see README “Buffer-local variables”).
+        return vim.b[bufnr].minidiff_summary ~= nil
+      end
+
+      local function toggle_minidiff_signs(bufnr)
+        bufnr = bufnr or 0
+        if mini_diff_is_enabled(bufnr) then
+          mini_diff.disable(bufnr)
+        else
+          mini_diff.enable(bufnr)
+        end
+        vim.defer_fn(function()
+          vim.cmd 'redraw!'
+        end, 100)
+      end
+
+      vim.keymap.set('n', '<leader>uG', function()
+        toggle_minidiff_signs(0)
+      end, { desc = 'MiniDiff: Toggle signs (current buffer)' })
+
+      -- Optional: if Snacks is installed, also register a UI toggle but keep the keymap above
+      if package.loaded['snacks'] or vim.g.loaded_snacks then
+        Snacks.toggle {
+          name = 'Mini Diff Signs',
+          get = function()
+            return mini_diff_is_enabled(0)
+          end,
+          set = function(state)
+            if state and not mini_diff_is_enabled(0) then
+              mini_diff.enable(0)
+            elseif (not state) and mini_diff_is_enabled(0) then
+              mini_diff.disable(0)
+            end
+            vim.defer_fn(function()
+              vim.cmd 'redraw!'
+            end, 100)
+          end,
+        } -- no mapping here; we already mapped <leader>uG directly
+      end
     end,
   },
 }
--- vim: ts=2 sts=2 sw=2 et
