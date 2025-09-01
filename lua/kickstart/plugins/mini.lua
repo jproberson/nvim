@@ -44,7 +44,7 @@ return {
       }
 
       -- Toggle the overlay (unchanged)
-      vim.keymap.set('n', '<leader>go', function()
+      vim.keymap.set('n', '<leader>uO', function()
         if not vim.wo.number and not vim.wo.relativenumber then
           vim.wo.number = true
         end

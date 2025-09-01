@@ -57,15 +57,17 @@ return {
         },
       },
 
-      -- Document existing key chains
-      spec = {
-        { '<leader>s', group = '[S]earch' },
-        { '<leader>t', group = '[T]oggle' },
-        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
-        { '<leader>x', group = 'Trouble' },
-        { '<leader>d', group = '[D]iffview' },
-      },
+      -- Document existing key chains in one place
+      spec = require('config.whichkey-groups').spec(),
     },
+    config = function(_, opts)
+      local wk = require 'which-key'
+      wk.setup(opts)
+      -- load helper that can check for missing groups
+      pcall(function()
+        require('config.whichkey-utils').setup()
+      end)
+    end,
   },
 }
 -- vim: ts=2 sts=2 sw=2 et

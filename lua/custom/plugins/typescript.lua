@@ -15,7 +15,7 @@ return {
 
         wk.register({
           ['<leader>c'] = {
-            name = '+typescript',
+            name = '[C]ode',
             a = { vim.lsp.buf.code_action, 'Code Action' },
             m = { '<cmd>TSToolsAddMissingImports<CR>', 'Add Missing Imports' },
             o = { '<cmd>TSToolsOrganizeImports<CR>', 'Organize Imports' },
