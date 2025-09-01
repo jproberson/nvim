@@ -1,5 +1,5 @@
 return {
-  { -- Autoformat
+  {
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
     cmd = { 'ConformInfo' },
@@ -7,7 +7,7 @@ return {
       {
         '<leader>f',
         function()
-          require('conform').format { async = true, lsp_format = 'fallback' }
+          require('conform').format { async = true, lsp_format = 'never' }
         end,
         mode = '',
         desc = '[F]ormat buffer',
@@ -16,15 +16,17 @@ return {
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
+        local ft = vim.bo[bufnr].filetype
         local disable_filetypes = { c = true, cpp = true }
-        if disable_filetypes[vim.bo[bufnr].filetype] then
+        if disable_filetypes[ft] then
           return nil
-        else
-          return {
-            timeout_ms = 500,
-            lsp_format = 'fallback',
-          }
         end
+
+        if ft == 'lua' then
+          return { timeout_ms = 2000, lsp_format = 'never' }
+        end
+
+        return { timeout_ms = 500, lsp_format = 'fallback' }
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
@@ -35,6 +37,19 @@ return {
         json = { 'prettierd', 'prettier', stop_after_first = true },
         yaml = { 'prettierd', 'prettier', stop_after_first = true },
         markdown = { 'prettierd', 'prettier', stop_after_first = true },
+      },
+      formatters = {
+        stylua = {
+          prepend_args = {
+            '--no-editorconfig',
+            '--indent-type',
+            'Spaces',
+            '--indent-width',
+            '4',
+            '--column-width',
+            '120',
+          },
+        },
       },
     },
   },

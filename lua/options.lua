@@ -71,4 +71,14 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+vim.o.expandtab = true
+-- Number of spaces that a <Tab> counts for
+vim.o.tabstop = 4
+-- Number of spaces to use for each step of (auto)indent
+vim.o.shiftwidth = 4
+-- Round indent to multiple of 'shiftwidth'
+vim.o.shiftround = true
+-- Use smart autoindenting when starting a new line
+vim.o.smartindent = true
+
 -- vim: ts=2 sts=2 sw=2 et
