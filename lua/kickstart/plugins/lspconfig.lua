@@ -70,7 +70,7 @@ return {
             if not client then
               return false
             end
-            return client.supports_method and client.supports_method(method)
+            return client.supports_method and client:supports_method(method)
           end
 
 
