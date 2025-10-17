@@ -4,6 +4,7 @@ local M = {}
 -- Add new prefixes here and they will show up automatically.
 M.groups = {
   { '<leader>c', group = '[C]ode' },
+  { '<leader>r', group = '[R]ust' },
   { '<leader>s', group = '[S]earch' },
   { '<leader>t', group = '[T]oggle' },
   { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
@@ -14,6 +15,7 @@ M.groups = {
   { '<leader>u', group = '[U]I' },
   { '<leader>q', group = '[Q]uickfix' },
   { '<leader>f', group = '[F]ormat' },
+  { '<leader>w', group = '[W]indow' },
 
   -- Non-leader chains
   { 'g', group = 'Goto' },

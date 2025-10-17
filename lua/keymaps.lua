@@ -95,3 +95,7 @@ vim.keymap.set('n', '<leader>uL', function()
   vim.opt.list = not vim.opt.list:get()
   vim.notify('list: ' .. (vim.opt.list:get() and 'ON' or 'OFF'))
 end, { desc = 'Toggle listchars' })
+
+-- Window splits
+vim.keymap.set('n', '<leader>wv', '<cmd>vsplit<cr>', { desc = '[W]indow [V]ertical split' })
+vim.keymap.set('n', '<leader>ws', '<cmd>split<cr>', { desc = '[W]indow [S]plit horizontal' })
