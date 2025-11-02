@@ -81,4 +81,13 @@ vim.o.shiftround = true
 -- Use smart autoindenting when starting a new line
 vim.o.smartindent = true
 
+-- Set tab width to 2 for JS/TS files (overrides defaults for web dev)
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'json', 'yaml', 'html', 'css', 'scss' },
+  callback = function()
+    vim.opt_local.tabstop = 2
+    vim.opt_local.shiftwidth = 2
+  end,
+})
+
 -- vim: ts=2 sts=2 sw=2 et

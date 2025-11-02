@@ -31,11 +31,11 @@ return {
   config = function(_, opts)
     require('toggleterm').setup(opts)
 
-    -- Keymaps for toggleterm
-    vim.keymap.set('n', '<leader>tt', '<cmd>ToggleTerm<cr>', { desc = '[T]oggle [T]erminal' })
-    vim.keymap.set('n', '<leader>tf', '<cmd>ToggleTerm direction=float<cr>', { desc = '[T]erminal [F]loat' })
-    vim.keymap.set('n', '<leader>th', '<cmd>ToggleTerm direction=horizontal<cr>', { desc = '[T]erminal [H]orizontal' })
-    vim.keymap.set('n', '<leader>tv', '<cmd>ToggleTerm direction=vertical<cr>', { desc = '[T]erminal [V]ertical' })
+    -- Keymaps for toggleterm (using <leader>T to avoid conflict with neotest)
+    vim.keymap.set('n', '<leader>TT', '<cmd>ToggleTerm<cr>', { desc = '[T]erminal [T]oggle' })
+    vim.keymap.set('n', '<leader>Tf', '<cmd>ToggleTerm direction=float<cr>', { desc = '[T]erminal [F]loat' })
+    vim.keymap.set('n', '<leader>Th', '<cmd>ToggleTerm direction=horizontal<cr>', { desc = '[T]erminal [H]orizontal' })
+    vim.keymap.set('n', '<leader>Tv', '<cmd>ToggleTerm direction=vertical<cr>', { desc = '[T]erminal [V]ertical' })
 
     -- Terminal mode mappings
     function _G.set_terminal_keymaps()

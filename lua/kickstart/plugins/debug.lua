@@ -72,6 +72,8 @@ return {
             ensure_installed = {
                 'delve', -- Go debugger
                 'codelldb', -- Rust debugger
+                'js-debug-adapter', -- JavaScript/TypeScript debugger
+                'netcoredbg', -- C#/.NET debugger
             },
         }
 
@@ -133,6 +135,54 @@ return {
                 end,
                 cwd = '${workspaceFolder}',
                 stopOnEntry = false,
+            },
+        }
+
+        -- JavaScript/TypeScript setup (vscode-js-debug)
+        require('dap').adapters['pwa-node'] = {
+            type = 'server',
+            host = 'localhost',
+            port = '${port}',
+            executable = {
+                command = 'js-debug-adapter',
+                args = { '${port}' },
+            },
+        }
+
+        for _, language in ipairs { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact' } do
+            dap.configurations[language] = {
+                {
+                    type = 'pwa-node',
+                    request = 'launch',
+                    name = 'Launch file',
+                    program = '${file}',
+                    cwd = '${workspaceFolder}',
+                },
+                {
+                    type = 'pwa-node',
+                    request = 'attach',
+                    name = 'Attach',
+                    processId = require('dap.utils').pick_process,
+                    cwd = '${workspaceFolder}',
+                },
+            }
+        end
+
+        -- C#/.NET setup (netcoredbg)
+        dap.adapters.coreclr = {
+            type = 'executable',
+            command = 'netcoredbg',
+            args = { '--interpreter=vscode' },
+        }
+
+        dap.configurations.cs = {
+            {
+                type = 'coreclr',
+                name = 'launch - netcoredbg',
+                request = 'launch',
+                program = function()
+                    return vim.fn.input('Path to dll: ', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+                end,
             },
         }
     end,

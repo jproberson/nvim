@@ -12,12 +12,20 @@ return {
   lazy = false,
   keys = {
     { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+    { '|', ':Neotree git_status<CR>', desc = 'NeoTree git status', silent = true },
   },
   opts = {
     filesystem = {
       window = {
         mappings = {
           ['\\'] = 'close_window',
+        },
+      },
+    },
+    git_status = {
+      window = {
+        mappings = {
+          ['|'] = 'close_window',
         },
       },
     },
