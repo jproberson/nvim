@@ -20,7 +20,7 @@ vim.o.showmode = false
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
 vim.schedule(function()
-  vim.o.clipboard = 'unnamedplus'
+    vim.o.clipboard = 'unnamedplus'
 end)
 
 -- Enable break indent
@@ -64,7 +64,8 @@ vim.o.inccommand = 'split'
 vim.o.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
-vim.o.scrolloff = 10
+-- Higher value = more room for which-key popup
+vim.o.scrolloff = 8
 
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
@@ -74,6 +75,7 @@ vim.o.confirm = true
 vim.o.expandtab = true
 -- Number of spaces that a <Tab> counts for
 vim.o.tabstop = 4
+vim.o.softtabstop = 4
 -- Number of spaces to use for each step of (auto)indent
 vim.o.shiftwidth = 4
 -- Round indent to multiple of 'shiftwidth'
@@ -83,11 +85,21 @@ vim.o.smartindent = true
 
 -- Set tab width to 2 for JS/TS files (overrides defaults for web dev)
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'json', 'yaml', 'html', 'css', 'scss' },
-  callback = function()
-    vim.opt_local.tabstop = 2
-    vim.opt_local.shiftwidth = 2
-  end,
+    pattern = {
+        'javascript',
+        'javascriptreact',
+        'typescript',
+        'typescriptreact',
+        'json',
+        'yaml',
+        'html',
+        'css',
+        'scss',
+    },
+    callback = function()
+        vim.opt_local.tabstop = 2
+        vim.opt_local.shiftwidth = 2
+    end,
 })
 
 -- vim: ts=2 sts=2 sw=2 et

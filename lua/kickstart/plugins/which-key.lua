@@ -17,9 +17,22 @@ return {
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
+      preset = 'modern', -- Try modern preset which shows more items
       -- delay between pressing a key and opening which-key (milliseconds)
       -- this setting is independent of vim.o.timeoutlen
       delay = 0,
+      win = {
+        border = 'rounded',
+        padding = { 1, 2 },
+        wo = {
+          winblend = 0, -- No transparency
+        },
+      },
+      layout = {
+        width = { min = 20 },
+        spacing = 3,
+      },
+      expand = 1, -- Expand to show more items
       icons = {
         -- set icon mappings to true if you have a Nerd Font
         mappings = vim.g.have_nerd_font,

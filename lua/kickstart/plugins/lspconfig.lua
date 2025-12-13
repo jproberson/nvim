@@ -37,6 +37,11 @@ return {
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
+          -- Skip if typescript-tools is handling this (it has its own on_attach)
+          local client = vim.lsp.get_client_by_id(event.data.client_id)
+          if client and client.name == 'typescript-tools' then
+            return
+          end
           local tb = require 'telescope.builtin'
 
           local function map(keys, fn, desc, mode)

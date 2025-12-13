@@ -6,7 +6,7 @@ return {
     'antoinemadec/FixCursorHold.nvim',
     'nvim-treesitter/nvim-treesitter',
     -- Test adapters for different languages
-    'nvim-neotest/neotest-jest', -- JavaScript/TypeScript
+    'marilari88/neotest-vitest', -- Vitest for JavaScript/TypeScript
     'rustaceanvim', -- Rust (uses rustaceanvim's test adapter)
     'Issafalcon/neotest-dotnet', -- C#/.NET
   },
@@ -15,12 +15,21 @@ return {
 
     neotest.setup {
       adapters = {
-        -- Jest for JavaScript/TypeScript
-        require 'neotest-jest' {
-          jestCommand = 'npm test --',
-          jestConfigFile = 'jest.config.js',
-          env = { CI = true },
-          cwd = function()
+        -- Vitest for JavaScript/TypeScript
+        require 'neotest-vitest' {
+          filter_dir = function(name, rel_path, root)
+            return name ~= 'node_modules'
+          end,
+          -- For monorepos: find the nearest package with vite.config
+          cwd = function(path)
+            -- Start from the test file and walk up to find vite.config.ts
+            local current = vim.fn.fnamemodify(path, ':h')
+            while current ~= '/' do
+              if vim.fn.filereadable(current .. '/vite.config.ts') == 1 or vim.fn.filereadable(current .. '/vitest.config.ts') == 1 then
+                return current
+              end
+              current = vim.fn.fnamemodify(current, ':h')
+            end
             return vim.fn.getcwd()
           end,
         },
