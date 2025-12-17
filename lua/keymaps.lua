@@ -68,13 +68,20 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 -- vim: ts=2 sts=2 sw=2 et
 
--- Move lines down
-vim.keymap.set('v', '<A-J>', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
+-- Move line down (normal mode)
+vim.keymap.set('n', '<A-J>', ':m .+1<CR>==', { noremap = true, silent = true, desc = 'Move line down' })
+vim.keymap.set('n', '<S-A-Down>', ':m .+1<CR>==', { noremap = true, silent = true })
+-- Move line up (normal mode)
+vim.keymap.set('n', '<A-K>', ':m .-2<CR>==', { noremap = true, silent = true, desc = 'Move line up' })
+vim.keymap.set('n', '<S-A-Up>', ':m .-2<CR>==', { noremap = true, silent = true })
+
+-- Move lines down (visual mode)
+vim.keymap.set('v', '<A-J>', ":m '>+1<CR>gv=gv", { noremap = true, silent = true, desc = 'Move lines down' })
 vim.keymap.set('v', '<S-A-Down>', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
 
--- Move lines up
+-- Move lines up (visual mode)
+vim.keymap.set('v', '<A-K>', ":m '<-2<CR>gv=gv", { noremap = true, silent = true, desc = 'Move lines up' })
 vim.keymap.set('v', '<S-A-Up>', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
-vim.keymap.set('v', '<A-K>', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
 
 -- CENTERING SEARCH RESULTS & SCROLLING
 -- Ctrl-d / Ctrl-u
