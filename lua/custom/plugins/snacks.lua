@@ -6,11 +6,71 @@ return {
   opts = {
     lazygit = { enabled = true },
     terminal = { enabled = true }, -- Snacks.terminal is used under the hood
+    toggle = { enabled = true },
     styles = {
       -- make lazygit full-screen (can set width/height to fractions like 0.9)
       lazygit = { width = 0, height = 0 },
     },
   },
+  config = function(_, opts)
+    local Snacks = require 'snacks'
+    Snacks.setup(opts)
+
+    -- Toggle: listchars
+    Snacks.toggle({
+      name = 'Listchars',
+      get = function()
+        return vim.opt.list:get()
+      end,
+      set = function(state)
+        vim.opt.list = state
+      end,
+    }):map '<leader>uL'
+
+    -- Toggle: line numbers
+    Snacks.toggle({
+      name = 'Line Numbers',
+      get = function()
+        return vim.wo.number
+      end,
+      set = function(state)
+        vim.wo.number = state
+      end,
+    }):map '<leader>un'
+
+    -- Toggle: relative line numbers
+    Snacks.toggle({
+      name = 'Relative Numbers',
+      get = function()
+        return vim.wo.relativenumber
+      end,
+      set = function(state)
+        vim.wo.relativenumber = state
+      end,
+    }):map '<leader>ur'
+
+    -- Toggle: word wrap
+    Snacks.toggle({
+      name = 'Word Wrap',
+      get = function()
+        return vim.wo.wrap
+      end,
+      set = function(state)
+        vim.wo.wrap = state
+      end,
+    }):map '<leader>uw'
+
+    -- Toggle: spell check
+    Snacks.toggle({
+      name = 'Spell Check',
+      get = function()
+        return vim.wo.spell
+      end,
+      set = function(state)
+        vim.wo.spell = state
+      end,
+    }):map '<leader>us'
+  end,
   keys = (function()
     local function project_root()
       local buf = vim.api.nvim_get_current_buf()

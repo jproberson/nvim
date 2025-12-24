@@ -112,11 +112,7 @@ vim.keymap.set('n', '<leader>cL', '<cmd>LspRestart<cr>', { desc = 'LSP: Restart'
 -- which-key utils
 vim.keymap.set('n', '<leader>uK', '<cmd>WhichKeyCheckGroups<cr>', { desc = 'which-key: Check missing groups' })
 
--- Toggle listchars (whitespace visibility)
-vim.keymap.set('n', '<leader>uL', function()
-  vim.opt.list = not vim.opt.list:get()
-  vim.notify('list: ' .. (vim.opt.list:get() and 'ON' or 'OFF'))
-end, { desc = 'Toggle listchars' })
+-- Toggle listchars moved to snacks.lua (uses Snacks.toggle for dynamic icons)
 
 -- Window splits
 vim.keymap.set('n', '<leader>wv', '<cmd>vsplit<cr>', { desc = '[W]indow [V]ertical split' })
