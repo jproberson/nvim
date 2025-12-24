@@ -55,5 +55,6 @@ return {
     { '<leader>ob', '<cmd>ObsidianBacklinks<cr>', desc = 'Backlinks' },
     { '<leader>ol', '<cmd>ObsidianLinks<cr>', desc = 'Links in note' },
     { '<leader>op', '<cmd>ObsidianPasteImg<cr>', desc = 'Paste image' },
+    { '<leader>so', '<cmd>ObsidianSearch<cr>', desc = 'Search Obsidian' },
   },
 }
