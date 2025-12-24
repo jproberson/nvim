@@ -102,4 +102,12 @@ vim.api.nvim_create_autocmd('FileType', {
     end,
 })
 
+-- Set conceallevel for markdown (required for obsidian.nvim UI features)
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = { 'markdown' },
+    callback = function()
+        vim.opt_local.conceallevel = 2
+    end,
+})
+
 -- vim: ts=2 sts=2 sw=2 et
