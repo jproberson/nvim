@@ -19,6 +19,7 @@ M.groups = {
   { '<leader>w', group = '[W]indow' },
   { '<leader>o', group = '[O]bsidian' },
   { '<leader>a', group = '[A]I' },
+  { '<leader>n', group = '[N]oice' },
 
   -- Non-leader chains
   { 'g', group = 'Goto' },
