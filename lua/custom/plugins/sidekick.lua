@@ -3,7 +3,7 @@ return {
   dependencies = {
     {
       'zbirenbaum/copilot.lua',
-      event = 'InsertEnter',
+      event = 'BufReadPost',  -- Load earlier so NES can find the client
       build = ':Copilot auth',
       opts = {
         suggestion = {

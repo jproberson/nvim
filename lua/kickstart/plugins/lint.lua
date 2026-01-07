@@ -14,6 +14,20 @@ return {
         typescriptreact = { 'eslint' },
       }
 
+      -- Find eslint in node_modules
+      local function find_eslint()
+        local node_modules = vim.fn.finddir('node_modules', '.;')
+        if node_modules ~= '' then
+          local eslint_bin = node_modules .. '/.bin/eslint'
+          if vim.fn.executable(eslint_bin) == 1 then
+            return eslint_bin
+          end
+        end
+        return 'eslint' -- fallback to global
+      end
+
+      lint.linters.eslint.cmd = find_eslint()
+
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
       -- instead set linters_by_ft like this:
       -- lint.linters_by_ft = lint.linters_by_ft or {}
