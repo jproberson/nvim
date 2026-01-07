@@ -6,19 +6,19 @@ return {
     local harpoon = require 'harpoon'
     harpoon:setup()
 
-    vim.keymap.set('n', '<leader>ha', function()
+    vim.keymap.set('n', '<leader>Ha', function()
       harpoon:list():add()
     end, { desc = '[H]arpoon [A]dd file' })
 
-    vim.keymap.set('n', '<leader>hm', function()
+    vim.keymap.set('n', '<leader>Hm', function()
       harpoon.ui:toggle_quick_menu(harpoon:list())
     end, { desc = '[H]arpoon [M]enu' })
 
-    vim.keymap.set('n', '<leader>hp', function()
+    vim.keymap.set('n', '<leader>Hp', function()
       harpoon:list():prev()
     end, { desc = '[H]arpoon [P]revious' })
 
-    vim.keymap.set('n', '<leader>hn', function()
+    vim.keymap.set('n', '<leader>Hn', function()
       harpoon:list():next()
     end, { desc = '[H]arpoon [N]ext' })
 

@@ -20,7 +20,7 @@ return {
           { '<leader>ca', vim.lsp.buf.code_action, buffer = bufnr, desc = 'Code Action' },
           { '<leader>cm', '<cmd>TSToolsAddMissingImports<CR>', buffer = bufnr, desc = 'Add Missing Imports' },
           { '<leader>co', '<cmd>TSToolsOrganizeImports<CR>', buffer = bufnr, desc = 'Organize Imports' },
-          { '<leader>cr', '<cmd>TSToolsRemoveUnused<CR>', buffer = bufnr, desc = 'Remove Unused' },
+          { '<leader>cu', '<cmd>TSToolsRemoveUnused<CR>', buffer = bufnr, desc = 'Remove Unused' },
           { '<leader>cf', '<cmd>TSToolsFixAll<CR>', buffer = bufnr, desc = 'Fix All' },
           { '<leader>cS', '<cmd>TSToolsGoToSourceDefinition<CR>', buffer = bufnr, desc = 'Source Definition' },
         })

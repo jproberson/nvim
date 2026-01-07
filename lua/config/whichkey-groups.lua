@@ -8,6 +8,7 @@ M.groups = {
   { '<leader>s', group = '[S]earch' },
   { '<leader>t', group = '[T]oggle' },
   { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+  { '<leader>H', group = '[H]arpoon' },
   { '<leader>x', group = 'Trouble' },
   { '<leader>d', group = '[D]iffview' },
   { '<leader>g', group = '[G]it' },
@@ -17,6 +18,7 @@ M.groups = {
   { '<leader>f', group = '[F]ormat' },
   { '<leader>w', group = '[W]indow' },
   { '<leader>o', group = '[O]bsidian' },
+  { '<leader>a', group = '[A]I' },
 
   -- Non-leader chains
   { 'g', group = 'Goto' },

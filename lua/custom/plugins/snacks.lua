@@ -70,6 +70,32 @@ return {
         vim.wo.spell = state
       end,
     }):map '<leader>us'
+
+    -- Toggle: treesitter context
+    Snacks.toggle({
+      name = 'Treesitter Context',
+      get = function()
+        return require('treesitter-context').enabled()
+      end,
+      set = function(state)
+        if state then
+          require('treesitter-context').enable()
+        else
+          require('treesitter-context').disable()
+        end
+      end,
+    }):map '<leader>uc'
+
+    -- Toggle: Sidekick NES (Next Edit Suggestions)
+    Snacks.toggle({
+      name = 'Edit Suggestions (NES)',
+      get = function()
+        return vim.g.sidekick_nes ~= false
+      end,
+      set = function(state)
+        vim.g.sidekick_nes = state
+      end,
+    }):map '<leader>ue'
   end,
   keys = (function()
     local function project_root()

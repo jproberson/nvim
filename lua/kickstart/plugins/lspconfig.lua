@@ -50,9 +50,8 @@ return {
           end
 
           -- LazyVim-like LSP keymaps
-          map('<leader>cl', function()
-            vim.cmd 'LspInfo'
-          end, 'Lsp Info')
+          -- Note: <leader>cl is used by Trouble for LSP references/definitions
+          -- Use :LspInfo or <leader>cL for LSP info/restart
           map('gd', tb.lsp_definitions, 'Goto Definition')
           map('gr', tb.lsp_references, 'References')
           map('gI', tb.lsp_implementations, 'Goto Implementation')

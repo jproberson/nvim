@@ -44,8 +44,30 @@ return {
     vim.keymap.set('n', '<leader>df', ':DiffviewFileHistory %<CR>', { desc = 'DiffView: File history (file)' })
     vim.keymap.set('n', '<leader>dF', ':DiffviewFileHistory<CR>', { desc = 'DiffView: Repo history' })
 
+    -- Detect default branch (main or master)
+    local function get_default_branch()
+      -- Check for origin/main first, then origin/master
+      local result = vim.fn.system('git rev-parse --verify origin/main 2>/dev/null')
+      if vim.v.shell_error == 0 then
+        return 'origin/main'
+      end
+      result = vim.fn.system('git rev-parse --verify origin/master 2>/dev/null')
+      if vim.v.shell_error == 0 then
+        return 'origin/master'
+      end
+      -- Fallback to local main/master
+      result = vim.fn.system('git rev-parse --verify main 2>/dev/null')
+      if vim.v.shell_error == 0 then
+        return 'main'
+      end
+      return 'master'
+    end
+
     -- Optional: handy presets
     vim.keymap.set('n', '<leader>dh', ':DiffviewOpen HEAD~1..HEAD<CR>', { desc = 'DiffView: HEAD~1 vs HEAD' })
-    vim.keymap.set('n', '<leader>dm', ':DiffviewOpen origin/main...HEAD<CR>', { desc = 'DiffView: main...HEAD' })
+    vim.keymap.set('n', '<leader>dm', function()
+      local branch = get_default_branch()
+      vim.cmd('DiffviewOpen ' .. branch .. '...HEAD')
+    end, { desc = 'DiffView: default branch...HEAD' })
   end,
 }
