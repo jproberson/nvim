@@ -95,7 +95,22 @@ return {
       set = function(state)
         vim.g.sidekick_nes = state
       end,
-    }):map '<leader>ue'
+    }):map '<leader>ae'
+
+    -- Toggle: Copilot
+    Snacks.toggle({
+      name = 'Copilot',
+      get = function()
+        return not require('copilot.client').is_disabled()
+      end,
+      set = function(state)
+        if state then
+          require('copilot.command').enable()
+        else
+          require('copilot.command').disable()
+        end
+      end,
+    }):map '<leader>ao'
   end,
   keys = (function()
     local function project_root()
