@@ -38,6 +38,7 @@ return {
         json = { 'prettierd', 'prettier', stop_after_first = true },
         yaml = { 'prettierd', 'prettier', stop_after_first = true },
         markdown = { 'prettierd', 'prettier', stop_after_first = true },
+        swift = { 'swift_format' },
       },
       formatters = {
         stylua = {

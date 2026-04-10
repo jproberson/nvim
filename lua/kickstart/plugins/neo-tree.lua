@@ -15,6 +15,14 @@ return {
     { '|', ':Neotree git_status<CR>', desc = 'NeoTree git status', silent = true },
   },
   opts = {
+    default_component_configs = {
+      git_status = {
+        symbols = {
+          unstaged = 'M',
+          staged = 'S',
+        },
+      },
+    },
     filesystem = {
       window = {
         mappings = {

@@ -1,6 +1,7 @@
 -- Previous tokyonight configuration (kept for reference)
 return {
     'folke/tokyonight.nvim',
+    enabled = false, -- Temporarily disabled in favor of onedark
     priority = 1000, -- Make sure to load this before all the other start plugins.
     config = function()
         -- Set to true for custom muted theme, false for original tokyonight

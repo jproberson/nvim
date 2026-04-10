@@ -58,6 +58,7 @@ return {
         --  All the info you're looking for is in `:help telescope.setup()`
         --
         defaults = {
+          path_display = { 'truncate' },
           file_previewer = previewers.vim_buffer_cat.new,
           grep_previewer = previewers.vim_buffer_vimgrep.new,
           qflist_previewer = previewers.vim_buffer_qflist.new,
