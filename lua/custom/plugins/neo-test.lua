@@ -5,37 +5,64 @@ return {
     'nvim-lua/plenary.nvim',
     'antoinemadec/FixCursorHold.nvim',
     'nvim-treesitter/nvim-treesitter',
-    -- Test adapters for different languages
-    'marilari88/neotest-vitest', -- Vitest for JavaScript/TypeScript
-    'rustaceanvim', -- Rust (uses rustaceanvim's test adapter)
-    'Issafalcon/neotest-dotnet', -- C#/.NET
+    'marilari88/neotest-vitest',
+    'nvim-neotest/neotest-jest',
+    'rustaceanvim',
+    'Issafalcon/neotest-dotnet',
   },
   config = function()
     local neotest = require 'neotest'
 
+    -- Walk up from a path looking for any of the given filenames
+    local function find_ancestor_file(path, filenames)
+      local current = vim.fn.fnamemodify(path, ':h')
+      while current ~= '/' do
+        for _, name in ipairs(filenames) do
+          if vim.fn.filereadable(current .. '/' .. name) == 1 then
+            return current
+          end
+        end
+        current = vim.fn.fnamemodify(current, ':h')
+      end
+      return nil
+    end
+
+    local vitest_configs = { 'vitest.config.ts', 'vitest.config.js', 'vitest.config.mts', 'vite.config.ts', 'vite.config.js', 'vite.config.mts' }
+    local jest_configs = { 'jest.config.js', 'jest.config.ts', 'jest.config.mjs', 'jest.config.cjs' }
+
     neotest.setup {
       adapters = {
-        -- Vitest for JavaScript/TypeScript
         require 'neotest-vitest' {
-          filter_dir = function(name, rel_path, root)
+          vitestCommand = 'npx vitest',
+          is_test_file = function(file_path)
+            if not string.match(file_path, '%.spec%.[jt]sx?$') and not string.match(file_path, '%.test%.[jt]sx?$') then
+              return false
+            end
+            return find_ancestor_file(file_path, vitest_configs) ~= nil
+          end,
+          filter_dir = function(name)
             return name ~= 'node_modules'
           end,
-          -- For monorepos: find the nearest package with vite.config
           cwd = function(path)
-            -- Start from the test file and walk up to find vite.config.ts
-            local current = vim.fn.fnamemodify(path, ':h')
-            while current ~= '/' do
-              if vim.fn.filereadable(current .. '/vite.config.ts') == 1 or vim.fn.filereadable(current .. '/vitest.config.ts') == 1 then
-                return current
-              end
-              current = vim.fn.fnamemodify(current, ':h')
-            end
-            return vim.fn.getcwd()
+            return find_ancestor_file(path, vitest_configs) or vim.fn.getcwd()
           end,
         },
-        -- Rust tests (via rustaceanvim)
+        require 'neotest-jest' {
+          jestCommand = 'npx jest',
+          is_test_file = function(file_path)
+            if not string.match(file_path, '%.spec%.[jt]sx?$') and not string.match(file_path, '%.test%.[jt]sx?$') then
+              return false
+            end
+            return find_ancestor_file(file_path, jest_configs) ~= nil
+          end,
+          filter_dir = function(name)
+            return name ~= 'node_modules'
+          end,
+          cwd = function(path)
+            return find_ancestor_file(path, jest_configs) or vim.fn.getcwd()
+          end,
+        },
         require 'rustaceanvim.neotest',
-        -- .NET/C# tests
         require 'neotest-dotnet' {
           dap = { justMyCode = false },
         },
