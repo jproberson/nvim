@@ -1,6 +1,6 @@
 local M = {}
 
--- Central place to define which-key groups
+-- Central place to define which-key groups.
 -- Add new prefixes here and they will show up automatically.
 M.groups = {
   { '<leader>c', group = '[C]ode' },

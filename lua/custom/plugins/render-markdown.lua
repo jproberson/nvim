@@ -1,25 +1,17 @@
-return {
-  'MeanderingProgrammer/render-markdown.nvim',
-  ft = 'markdown',
-  dependencies = {
-    'nvim-treesitter/nvim-treesitter',
-    'nvim-tree/nvim-web-devicons',
+require('render-markdown').setup {
+  heading = {
+    icons = { '󰎤 ', '󰎧 ', '󰎪 ', '󰎭 ', '󰎱 ', '󰎳 ' },
   },
-  opts = {
-    heading = {
-      icons = { '󰎤 ', '󰎧 ', '󰎪 ', '󰎭 ', '󰎱 ', '󰎳 ' },
+  checkbox = {
+    enabled = true,
+    unchecked = { icon = '󰄱 ' },
+    checked = { icon = '󰄵 ' },
+    custom = {
+      todo = { raw = '[-]', rendered = '󰥔 ', highlight = 'RenderMarkdownTodo' },
+      partial = { raw = '[~]', rendered = '󰡖 ', highlight = 'RenderMarkdownWarn' },
     },
-    checkbox = {
-      enabled = true,
-      unchecked = { icon = '󰄱 ' },
-      checked = { icon = '󰄵 ' },
-      custom = {
-        todo = { raw = '[-]', rendered = '󰥔 ', highlight = 'RenderMarkdownTodo' },
-        partial = { raw = '[~]', rendered = '󰡖 ', highlight = 'RenderMarkdownWarn' },
-      },
-    },
-    link = {
-      wiki = { icon = '󱗖 ' },
-    },
+  },
+  link = {
+    wiki = { icon = '󱗖 ' },
   },
 }
