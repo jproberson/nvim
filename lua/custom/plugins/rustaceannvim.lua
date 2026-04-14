@@ -6,6 +6,11 @@ return {
     -- Cargo/Rust commands
     vim.keymap.set('n', '<leader>rd', '<cmd>!cargo doc --open<cr>', { desc = '[R]ust [D]oc open' })
     vim.keymap.set('n', '<leader>rr', '<cmd>!cargo run<cr>', { desc = '[R]ust [R]un' })
+    vim.keymap.set('n', '<leader>rf', function()
+      local file = vim.fn.expand '%:p'
+      local out = '/tmp/rust_out'
+      vim.cmd('TermExec cmd="rustc ' .. file .. ' -o ' .. out .. ' && ' .. out .. '"')
+    end, { desc = '[R]ust [F]ile run (single file)' })
     vim.keymap.set('n', '<leader>rR', function()
       local args = vim.fn.input('Cargo run args: ')
       if args ~= '' then

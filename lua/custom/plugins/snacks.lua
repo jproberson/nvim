@@ -86,6 +86,17 @@ return {
       end,
     }):map '<leader>uc'
 
+    -- Toggle: format on save
+    Snacks.toggle({
+      name = 'Format on Save',
+      get = function()
+        return vim.g.format_on_save ~= false
+      end,
+      set = function(state)
+        vim.g.format_on_save = state
+      end,
+    }):map '<leader>uf'
+
     -- Toggle: Sidekick NES (Next Edit Suggestions)
     Snacks.toggle({
       name = 'Edit Suggestions (NES)',

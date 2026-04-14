@@ -8,10 +8,6 @@ return {
       lint.linters_by_ft = {
         markdown = { 'markdownlint' },
         rust = { 'clippy' },
-        javascript = { 'eslint' },
-        javascriptreact = { 'eslint' },
-        typescript = { 'eslint' },
-        typescriptreact = { 'eslint' },
       }
 
       -- Find eslint in node_modules
@@ -27,6 +23,26 @@ return {
       end
 
       lint.linters.eslint.cmd = find_eslint()
+
+      -- Detect if current buffer's project uses biome
+      local function has_biome_config(bufnr)
+        local buf_path = vim.api.nvim_buf_get_name(bufnr)
+        if buf_path == '' then
+          return false
+        end
+        return vim.fs.find({ 'biome.json', 'biome.jsonc' }, {
+          upward = true,
+          path = vim.fs.dirname(buf_path),
+          stop = vim.env.HOME,
+        })[1] ~= nil
+      end
+
+      local js_ts_fts = {
+        javascript = true,
+        javascriptreact = true,
+        typescript = true,
+        typescriptreact = true,
+      }
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
       -- instead set linters_by_ft like this:
@@ -66,12 +82,21 @@ return {
       vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {
         group = lint_augroup,
         callback = function()
-          -- Only run the linter in buffers that you can modify in order to
-          -- avoid superfluous noise, notably within the handy LSP pop-ups that
-          -- describe the hovered symbol using Markdown.
-          if vim.bo.modifiable then
-            lint.try_lint()
+          if not vim.bo.modifiable then
+            return
           end
+
+          -- Dynamically choose linter for JS/TS based on project config
+          local ft = vim.bo.filetype
+          if js_ts_fts[ft] then
+            if has_biome_config(0) then
+              lint.linters_by_ft[ft] = { 'biomejs' }
+            else
+              lint.linters_by_ft[ft] = { 'eslint' }
+            end
+          end
+
+          lint.try_lint()
         end,
       })
     end,

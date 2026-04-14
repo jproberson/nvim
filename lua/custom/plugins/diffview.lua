@@ -4,6 +4,9 @@ return {
     -- Clearer, more DSF-like diffs
     vim.opt.diffopt:append { 'linematch:60', 'algorithm:histogram', 'indent-heuristic' }
 
+    -- Replace ugly dashed fill lines with blank space
+    vim.opt.fillchars:append { diff = ' ' }
+
     require('diffview').setup {
       enhanced_diff_hl = true,
       show_help_hints = true,
@@ -19,7 +22,6 @@ return {
       default_args = { DiffviewFileHistory = { '--follow' } },
       hooks = {
         diff_buf_read = function(bufnr)
-          -- keep things clean like DSF output
           vim.opt_local.wrap = false
           vim.opt_local.list = false
           vim.opt_local.colorcolumn = ''
@@ -27,14 +29,12 @@ return {
       },
     }
 
-    -- Make added/removed lines pop (adjust to taste or your colorscheme)
+    -- Diff highlights tuned for #1a1a1a muted theme
     local hl = vim.api.nvim_set_hl
-    hl(0, 'DiffAdd', { bg = '#0b3d16' })
-    hl(0, 'DiffDelete', { bg = '#3d0b0b' })
-    hl(0, 'DiffChange', { bg = '#0b2a3d' })
-    hl(0, 'DiffText', { bg = '#154760', bold = true })
-    hl(0, 'DiffAdded', { fg = '#4fd38a', bold = true })
-    hl(0, 'DiffRemoved', { fg = '#ff6b6b', bold = true })
+    hl(0, 'DiffAdd', { bg = '#1e2e1e' })        -- subtle green tint
+    hl(0, 'DiffDelete', { bg = '#2e1e1e' })      -- subtle red tint
+    hl(0, 'DiffChange', { bg = '#1e2530' })       -- subtle blue tint
+    hl(0, 'DiffText', { bg = '#263545', bold = true }) -- emphasized changed text
 
     -- Keymaps
     vim.keymap.set('n', '<leader>do', ':DiffviewOpen<CR>', { desc = 'DiffView: Open' })

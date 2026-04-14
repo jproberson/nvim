@@ -64,6 +64,15 @@ return {
           qflist_previewer = previewers.vim_buffer_qflist.new,
         },
         pickers = {
+          find_files = {
+            hidden = true,
+          },
+          live_grep = {
+            additional_args = { '--hidden' },
+          },
+          grep_string = {
+            additional_args = { '--hidden' },
+          },
           git_status = {
             previewer = previewers.new_termopen_previewer {
               get_command = function(entry)
