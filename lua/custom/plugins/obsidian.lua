@@ -1,10 +1,21 @@
+local all_workspaces = {
+  { name = 'work notes', path = '~/vaults/work/' },
+}
+
+local workspaces = {}
+for _, ws in ipairs(all_workspaces) do
+  local expanded = vim.fn.expand(ws.path)
+  if vim.fn.isdirectory(expanded) == 1 then
+    table.insert(workspaces, ws)
+  end
+end
+
+if #workspaces == 0 then
+  return
+end
+
 require('obsidian').setup {
-  workspaces = {
-    {
-      name = 'work notes',
-      path = '~/vaults/work/',
-    },
-  },
+  workspaces = workspaces,
   completion = {
     nvim_cmp = false,
     min_chars = 2,
