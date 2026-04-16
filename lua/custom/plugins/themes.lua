@@ -70,6 +70,12 @@ local theme_setups = {
   onedark = function()
     require('onedark').setup { style = 'darker', code_style = { comments = 'none' } }
   end,
+  fluoromachine = function()
+    require('fluoromachine').setup { glow = true, theme = 'fluoromachine' }
+  end,
+  silkcircuit = function()
+    require('silkcircuit').setup { style = 'glow' }
+  end,
 }
 
 local cs_to_key = {
@@ -85,6 +91,8 @@ local cs_to_key = {
   ['solarized-osaka'] = 'solarized-osaka', ['solarized-osaka-storm'] = 'solarized-osaka',
   dracula = 'dracula', ['dracula-soft'] = 'dracula',
   onedark = 'onedark',
+  fluoromachine = 'fluoromachine',
+  silkcircuit = 'silkcircuit',
 }
 
 local configured = {}
@@ -108,6 +116,20 @@ local themes = {
   { name = 'dracula', colorscheme = 'dracula' },
   { name = 'dracula-soft', colorscheme = 'dracula-soft' },
   { name = 'everforest', colorscheme = 'everforest' },
+  {
+    name = 'everforest-soft',
+    colorscheme = 'everforest',
+    before = function()
+      require('everforest').setup { background = 'soft', italics = false }
+    end,
+  },
+  {
+    name = 'everforest-hard',
+    colorscheme = 'everforest',
+    before = function()
+      require('everforest').setup { background = 'hard', italics = false }
+    end,
+  },
   { name = 'gruvbox-material', colorscheme = 'gruvbox-material' },
   { name = 'kanagawa-dragon', colorscheme = 'kanagawa-dragon' },
   { name = 'kanagawa-wave', colorscheme = 'kanagawa-wave' },
@@ -131,13 +153,65 @@ local themes = {
   { name = 'tokyonight-storm', colorscheme = 'tokyonight-storm' },
   { name = 'tokyonight-moon', colorscheme = 'tokyonight-moon' },
   { name = 'onedark', colorscheme = 'onedark' },
+  {
+    name = 'onedark-cool',
+    colorscheme = 'onedark',
+    before = function()
+      require('onedark').setup { style = 'cool', code_style = { comments = 'none' } }
+    end,
+  },
+  {
+    name = 'onedark-deep',
+    colorscheme = 'onedark',
+    before = function()
+      require('onedark').setup { style = 'deep', code_style = { comments = 'none' } }
+    end,
+  },
+  {
+    name = 'onedark-warm',
+    colorscheme = 'onedark',
+    before = function()
+      require('onedark').setup { style = 'warm', code_style = { comments = 'none' } }
+    end,
+  },
+  {
+    name = 'onedark-warmer',
+    colorscheme = 'onedark',
+    before = function()
+      require('onedark').setup { style = 'warmer', code_style = { comments = 'none' } }
+    end,
+  },
   { name = 'nord', colorscheme = 'nord' },
   { name = 'oxocarbon', colorscheme = 'oxocarbon' },
+  { name = 'fluoromachine', colorscheme = 'fluoromachine' },
+  {
+    name = 'fluoromachine-retro',
+    colorscheme = 'fluoromachine',
+    before = function()
+      require('fluoromachine').setup { glow = true, theme = 'retrowave' }
+    end,
+  },
+  {
+    name = 'fluoromachine-delta',
+    colorscheme = 'fluoromachine',
+    before = function()
+      require('fluoromachine').setup { glow = true, theme = 'delta' }
+    end,
+  },
+  { name = 'silkcircuit', colorscheme = 'silkcircuit' },
 }
 
 local saved = get_saved_theme() or default_theme
-local ok = pcall(vim.cmd.colorscheme, saved)
-if not ok then
+local function apply_saved_theme(name)
+  for _, t in ipairs(themes) do
+    if t.name == name then
+      if t.before then t.before() end
+      return pcall(vim.cmd.colorscheme, t.colorscheme)
+    end
+  end
+  return pcall(vim.cmd.colorscheme, name)
+end
+if not apply_saved_theme(saved) then
   vim.cmd.colorscheme(default_theme)
 end
 
@@ -148,7 +222,7 @@ vim.keymap.set('n', '<leader>uT', function()
   local actions = require 'telescope.actions'
   local action_state = require 'telescope.actions.state'
 
-  local current = vim.g.colors_name or ''
+  local current = get_saved_theme() or vim.g.colors_name or ''
 
   pickers
     .new(require('telescope.themes').get_dropdown { winblend = 10 }, {
@@ -157,7 +231,7 @@ vim.keymap.set('n', '<leader>uT', function()
         results = themes,
         entry_maker = function(entry)
           local display = entry.name
-          if entry.colorscheme == current then
+          if entry.name == current then
             display = display .. ' (current)'
           end
           return {
@@ -179,8 +253,9 @@ vim.keymap.set('n', '<leader>uT', function()
             return
           end
           local entry = action_state.get_selected_entry()
-          if entry and entry.value.colorscheme ~= last_previewed then
-            last_previewed = entry.value.colorscheme
+          if entry and entry.value.name ~= last_previewed then
+            last_previewed = entry.value.name
+            if entry.value.before then entry.value.before() end
             pcall(vim.cmd.colorscheme, entry.value.colorscheme)
           end
         end))
@@ -191,8 +266,9 @@ vim.keymap.set('n', '<leader>uT', function()
           timer:stop()
           actions.close(prompt_bufnr)
           if entry then
+            if entry.value.before then entry.value.before() end
             pcall(vim.cmd.colorscheme, entry.value.colorscheme)
-            save_theme(entry.value.colorscheme)
+            save_theme(entry.value.name)
           end
         end)
 

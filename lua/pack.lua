@@ -109,6 +109,8 @@ vim.pack.add({
   { src = 'https://github.com/navarasu/onedark.nvim' },
   { src = 'https://github.com/shaunsingh/nord.nvim' },
   { src = 'https://github.com/nyoom-engineering/oxocarbon.nvim' },
+  { src = 'https://github.com/maxmx03/fluoromachine.nvim' },
+  { src = 'https://github.com/hyperb1iss/silkcircuit-nvim' },
 
   { src = 'https://github.com/akinsho/toggleterm.nvim' },
 
