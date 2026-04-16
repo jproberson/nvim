@@ -2,10 +2,18 @@ local previewers = require 'telescope.previewers'
 
 require('telescope').setup {
   defaults = {
-    path_display = { 'truncate' },
+    path_display = { 'filename_first' },
     file_previewer = previewers.vim_buffer_cat.new,
     grep_previewer = previewers.vim_buffer_vimgrep.new,
     qflist_previewer = previewers.vim_buffer_qflist.new,
+    layout_strategy = 'horizontal',
+    layout_config = {
+      horizontal = {
+        preview_width = 0.4,
+        prompt_position = 'top',
+      },
+    },
+    sorting_strategy = 'ascending',
   },
   pickers = {
     find_files = {
@@ -13,9 +21,11 @@ require('telescope').setup {
     },
     live_grep = {
       additional_args = { '--hidden' },
+      path_display = { 'tail' },
     },
     grep_string = {
       additional_args = { '--hidden' },
+      path_display = { 'tail' },
     },
     git_status = {
       previewer = previewers.new_termopen_previewer {

@@ -11,15 +11,14 @@ require('typescript-tools').setup {
   },
   on_attach = function(_, bufnr)
     local wk = require 'which-key'
-    local tb = require 'telescope.builtin'
 
     local function map(keys, fn, desc, mode)
       vim.keymap.set(mode or 'n', keys, fn, { buffer = bufnr, desc = 'LSP: ' .. desc })
     end
-    map('gd', tb.lsp_definitions, 'Goto Definition')
-    map('gr', tb.lsp_references, 'References')
-    map('gI', tb.lsp_implementations, 'Goto Implementation')
-    map('gy', tb.lsp_type_definitions, 'Goto Type Definition')
+    map('gd', function() Snacks.picker.lsp_definitions() end, 'Goto Definition')
+    map('gr', function() Snacks.picker.lsp_references() end, 'References')
+    map('gI', function() Snacks.picker.lsp_implementations() end, 'Goto Implementation')
+    map('gy', function() Snacks.picker.lsp_type_definitions() end, 'Goto Type Definition')
     map('gD', vim.lsp.buf.declaration, 'Goto Declaration')
     map('K', vim.lsp.buf.hover, 'Hover')
     map('<leader>ca', vim.lsp.buf.code_action, 'Code Action', { 'n', 'v' })

@@ -106,6 +106,9 @@ vim.pack.add({
   { src = 'https://github.com/neanias/everforest-nvim' },
   { src = 'https://github.com/craftzdog/solarized-osaka.nvim' },
   { src = 'https://github.com/Mofiqul/dracula.nvim' },
+  { src = 'https://github.com/navarasu/onedark.nvim' },
+  { src = 'https://github.com/shaunsingh/nord.nvim' },
+  { src = 'https://github.com/nyoom-engineering/oxocarbon.nvim' },
 
   { src = 'https://github.com/akinsho/toggleterm.nvim' },
 

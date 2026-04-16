@@ -21,17 +21,15 @@ vim.api.nvim_create_autocmd('LspAttach', {
     if client and client.name == 'typescript-tools' then
       return
     end
-    local tb = require 'telescope.builtin'
-
     local function map(keys, fn, desc, mode)
       mode = mode or 'n'
       vim.keymap.set(mode, keys, fn, { buffer = event.buf, desc = 'LSP: ' .. desc })
     end
 
-    map('gd', tb.lsp_definitions, 'Goto Definition')
-    map('gr', tb.lsp_references, 'References')
-    map('gI', tb.lsp_implementations, 'Goto Implementation')
-    map('gy', tb.lsp_type_definitions, 'Goto Type Definition')
+    map('gd', function() Snacks.picker.lsp_definitions() end, 'Goto Definition')
+    map('gr', function() Snacks.picker.lsp_references() end, 'References')
+    map('gI', function() Snacks.picker.lsp_implementations() end, 'Goto Implementation')
+    map('gy', function() Snacks.picker.lsp_type_definitions() end, 'Goto Type Definition')
     map('gD', vim.lsp.buf.declaration, 'Goto Declaration')
     map('K', vim.lsp.buf.hover, 'Hover')
     map('gK', vim.lsp.buf.signature_help, 'Signature Help')
@@ -41,8 +39,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map('<leader>cA', function()
       vim.lsp.buf.code_action { context = { only = { 'source' }, diagnostics = {} } }
     end, 'Source Action')
-    map('gO', tb.lsp_document_symbols, 'Document Symbols')
-    map('gW', tb.lsp_dynamic_workspace_symbols, 'Workspace Symbols')
+    map('gO', function() Snacks.picker.lsp_symbols() end, 'Document Symbols')
+    map('gW', function() Snacks.picker.lsp_workspace_symbols() end, 'Workspace Symbols')
 
     local function supports(method)
       if not client then

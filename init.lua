@@ -17,7 +17,7 @@ require 'custom.plugins.themes'
 
 require 'kickstart.plugins.which-key'
 require 'kickstart.plugins.gitsigns'
-require 'kickstart.plugins.telescope'
+-- require 'kickstart.plugins.telescope' -- kept for reference; using snacks.picker instead
 require 'kickstart.plugins.treesitter'
 require 'custom.plugins.treesitter-context'
 

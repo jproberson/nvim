@@ -67,6 +67,9 @@ local theme_setups = {
   dracula = function()
     require('dracula').setup { italic_comment = false }
   end,
+  onedark = function()
+    require('onedark').setup { style = 'darker', code_style = { comments = 'none' } }
+  end,
 }
 
 local cs_to_key = {
@@ -81,6 +84,7 @@ local cs_to_key = {
   everforest = 'everforest',
   ['solarized-osaka'] = 'solarized-osaka', ['solarized-osaka-storm'] = 'solarized-osaka',
   dracula = 'dracula', ['dracula-soft'] = 'dracula',
+  onedark = 'onedark',
 }
 
 local configured = {}
@@ -126,6 +130,9 @@ local themes = {
   { name = 'tokyonight-night', colorscheme = 'tokyonight-night' },
   { name = 'tokyonight-storm', colorscheme = 'tokyonight-storm' },
   { name = 'tokyonight-moon', colorscheme = 'tokyonight-moon' },
+  { name = 'onedark', colorscheme = 'onedark' },
+  { name = 'nord', colorscheme = 'nord' },
+  { name = 'oxocarbon', colorscheme = 'oxocarbon' },
 }
 
 local saved = get_saved_theme() or default_theme
@@ -144,7 +151,7 @@ vim.keymap.set('n', '<leader>uT', function()
   local current = vim.g.colors_name or ''
 
   pickers
-    .new({}, {
+    .new(require('telescope.themes').get_dropdown { winblend = 10 }, {
       prompt_title = 'Switch Theme',
       finder = finders.new_table {
         results = themes,
