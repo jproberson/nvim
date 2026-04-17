@@ -2,6 +2,44 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
+vim.keymap.set('n', '<leader>xw', function()
+  local root = vim.fs.root(0, { 'tsconfig.json', '*.csproj', '*.sln', 'Cargo.toml', 'Package.swift', 'go.mod' })
+  if not root then
+    vim.notify('No recognized project root found', vim.log.levels.WARN)
+    return
+  end
+
+  local cmd, efm
+  if vim.fs.find('tsconfig.json', { path = root, limit = 1 })[1] then
+    cmd = 'npx tsc --noEmit --pretty false'
+    efm = '%f(%l\\,%c): error %m,%f(%l\\,%c): warning %m'
+  elseif vim.fs.find(function(name) return name:match('%.csproj$') or name:match('%.sln$') end, { path = root, limit = 1 })[1] then
+    cmd = 'dotnet build --no-restore --nologo'
+    efm = '%f(%l\\,%c): error %m,%f(%l\\,%c): warning %m'
+  elseif vim.fs.find('Cargo.toml', { path = root, limit = 1 })[1] then
+    cmd = 'cargo check --message-format=short 2>&1'
+    efm = '%f:%l:%c: %m'
+  elseif vim.fs.find('Package.swift', { path = root, limit = 1 })[1] then
+    cmd = 'swift build 2>&1'
+    efm = '%f:%l:%c: %m'
+  elseif vim.fs.find('go.mod', { path = root, limit = 1 })[1] then
+    cmd = 'go build ./... 2>&1'
+    efm = '%f:%l:%c: %m'
+  end
+
+  vim.notify('Running: ' .. cmd, vim.log.levels.INFO)
+  local output = vim.fn.systemlist('cd ' .. vim.fn.shellescape(root) .. ' && ' .. cmd)
+
+  -- Make relative paths absolute so quickfix jumps work regardless of cwd
+  for i, line in ipairs(output) do
+    if not line:match('^/') and line:match('^[%w%.]+') then
+      output[i] = root .. '/' .. line
+    end
+  end
+
+  vim.fn.setqflist({}, ' ', { title = cmd, lines = output, efm = efm })
+  vim.cmd('copen')
+end, { desc = 'Workspace type-check (project-aware)' })
 vim.keymap.set('n', ']d', function()
   vim.diagnostic.jump { count = 1 }
 end, { desc = 'Go to next diagnostic' })

@@ -161,14 +161,10 @@ Snacks.toggle({
 Snacks.toggle({
     name = 'Copilot',
     get = function()
-        return not require('copilot.client').is_disabled()
+        return #vim.lsp.get_clients({ name = 'copilot' }) > 0
     end,
     set = function(state)
-        if state then
-            require('copilot.command').enable()
-        else
-            require('copilot.command').disable()
-        end
+        vim.lsp.enable('copilot', state)
     end,
 }):map '<leader>ao'
 

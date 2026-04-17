@@ -7,7 +7,7 @@
 --       (cd there && make)
 --   - LuaSnip:                run `make install_jsregexp` in the plugin dir if you use
 --                             snippet transformations (regex-based). Optional.
---   - copilot.lua:            run `:Copilot auth` once to sign in.
+--   - copilot:                run `:LspCopilotSignIn` once to authenticate.
 --   - blink.cmp:              fuzzy matcher Rust binary is auto-downloaded at runtime
 --                             (via fuzzy.implementation = 'prefer_rust'); no manual build.
 
@@ -91,7 +91,6 @@ vim.pack.add({
   { src = 'https://github.com/Aasim-A/scrollEOF.nvim' },
 
   { src = 'https://github.com/folke/sidekick.nvim' },
-  { src = 'https://github.com/zbirenbaum/copilot.lua' }, -- run :Copilot auth
 
   { src = 'https://github.com/folke/snacks.nvim' },
 
@@ -122,4 +121,5 @@ vim.pack.add({
   { src = 'https://github.com/dmmulroy/ts-error-translator.nvim' },
 
   { src = 'https://github.com/mbbill/undotree' },
+
 })
