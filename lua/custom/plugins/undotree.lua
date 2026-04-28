@@ -1,20 +1,12 @@
-return {
-  'mbbill/undotree',
-  cmd = 'UndotreeToggle', -- Lazy load on command
-  keys = {
-    { '<leader>U', '<cmd>UndotreeToggle<cr>', desc = 'Undo Tree' },
-  },
-  config = function()
-    -- Focus the undo tree when opened
-    vim.g.undotree_SetFocusWhenToggle = 1
+-- Built-in opt-in plugins (nvim 0.12) — :Undotree and :DiffTool stay available
+vim.cmd.packadd('nvim.undotree')
+vim.cmd.packadd('nvim.difftool')
 
-    -- Use short timestamps
-    vim.g.undotree_ShortIndicators = 1
+-- mbbill/undotree provides a richer UI (diff panel, timestamps); use it for the
+-- main keymap. The builtin :Undotree command is still callable directly.
+vim.g.undotree_SetFocusWhenToggle = 1
+vim.g.undotree_ShortIndicators = 1
+vim.g.undotree_WindowLayout = 2
+vim.g.undotree_DiffpanelHeight = 10
 
-    -- Position on the right side
-    vim.g.undotree_WindowLayout = 2
-
-    -- Diff window height
-    vim.g.undotree_DiffpanelHeight = 10
-  end,
-}
+vim.keymap.set('n', '<leader>U', '<cmd>UndotreeToggle<cr>', { desc = 'Undo Tree' })

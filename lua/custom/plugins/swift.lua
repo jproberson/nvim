@@ -1,37 +1,18 @@
--- Swift LSP and tooling support
--- Note: sourcekit-lsp comes bundled with Xcode, not installed via Mason
-
-local swift_lsp_configured = false
-
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'swift', 'objective-c', 'objective-cpp' },
-  callback = function()
-    -- Only configure sourcekit once
-    if not swift_lsp_configured then
-      swift_lsp_configured = true
-
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
-      local util = require 'lspconfig.util'
-
-      require('lspconfig').sourcekit.setup {
-        capabilities = capabilities,
-        cmd = { 'xcrun', 'sourcekit-lsp' },
-        filetypes = { 'swift', 'objective-c', 'objective-cpp' },
-        root_dir = function(filename, _)
-          return util.root_pattern('buildServer.json')(filename)
-            or util.root_pattern('*.xcodeproj', '*.xcworkspace')(filename)
-            or util.root_pattern('compile_commands.json', 'Package.swift')(filename)
-            or util.find_git_ancestor(filename)
-        end,
-      }
-    end
-
-    -- Start LSP for this buffer
-    vim.cmd 'LspStart sourcekit'
-  end,
+-- sourcekit-lsp comes bundled with Xcode, not installed via Mason
+vim.lsp.config('sourcekit', {
+  cmd = { 'xcrun', 'sourcekit-lsp' },
+  filetypes = { 'swift', 'objective-c', 'objective-cpp' },
+  root_markers = {
+    'buildServer.json',
+    '*.xcodeproj',
+    '*.xcworkspace',
+    'compile_commands.json',
+    'Package.swift',
+    '.git',
+  },
 })
+vim.lsp.enable('sourcekit')
 
--- Swift keymaps
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'swift',
   callback = function(ev)
@@ -42,6 +23,5 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
--- Note: Swift treesitter requires an older tree-sitter CLI version.
--- Syntax highlighting will use vim's built-in Swift support instead.
-return {}
+-- Swift treesitter requires an older tree-sitter CLI version; syntax
+-- highlighting uses vim's built-in Swift support instead.

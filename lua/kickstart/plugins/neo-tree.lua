@@ -1,41 +1,27 @@
--- Neo-tree is a Neovim plugin to browse the file system
--- https://github.com/nvim-neo-tree/neo-tree.nvim
-
-return {
-  'nvim-neo-tree/neo-tree.nvim',
-  version = '*',
-  dependencies = {
-    'nvim-lua/plenary.nvim',
-    'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
-    'MunifTanjim/nui.nvim',
-  },
-  lazy = false,
-  keys = {
-    { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
-    { '|', ':Neotree git_status<CR>', desc = 'NeoTree git status', silent = true },
-  },
-  opts = {
-    default_component_configs = {
-      git_status = {
-        symbols = {
-          unstaged = 'M',
-          staged = 'S',
-        },
-      },
-    },
-    filesystem = {
-      window = {
-        mappings = {
-          ['\\'] = 'close_window',
-        },
-      },
-    },
+require('neo-tree').setup {
+  default_component_configs = {
     git_status = {
-      window = {
-        mappings = {
-          ['|'] = 'close_window',
-        },
+      symbols = {
+        unstaged = 'M',
+        staged = 'S',
+      },
+    },
+  },
+  filesystem = {
+    window = {
+      mappings = {
+        ['\\'] = 'close_window',
+      },
+    },
+  },
+  git_status = {
+    window = {
+      mappings = {
+        ['|'] = 'close_window',
       },
     },
   },
 }
+
+vim.keymap.set('n', '\\', ':Neotree reveal<CR>', { desc = 'NeoTree reveal', silent = true })
+vim.keymap.set('n', '|', ':Neotree git_status<CR>', { desc = 'NeoTree git status', silent = true })
