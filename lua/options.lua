@@ -49,23 +49,24 @@ vim.o.shiftround = true
 vim.o.smartindent = true
 
 -- Override tab width to 2 for JS/TS/web filetypes
-vim.api.nvim_create_autocmd('FileType', {
-    pattern = {
-        'javascript',
-        'javascriptreact',
-        'typescript',
-        'typescriptreact',
-        'json',
-        'yaml',
-        'html',
-        'css',
-        'scss',
-    },
-    callback = function()
-        vim.opt_local.tabstop = 2
-        vim.opt_local.shiftwidth = 2
-    end,
-})
+-- Disabled in favor of guess-indent.nvim; re-enable if guess-indent gets it wrong.
+-- vim.api.nvim_create_autocmd('FileType', {
+--     pattern = {
+--         'javascript',
+--         'javascriptreact',
+--         'typescript',
+--         'typescriptreact',
+--         'json',
+--         'yaml',
+--         'html',
+--         'css',
+--         'scss',
+--     },
+--     callback = function()
+--         vim.opt_local.tabstop = 2
+--         vim.opt_local.shiftwidth = 2
+--     end,
+-- })
 
 -- conceallevel required for obsidian.nvim UI features
 vim.api.nvim_create_autocmd('FileType', {

@@ -92,6 +92,8 @@ vim.pack.add({
 
   { src = 'https://github.com/folke/sidekick.nvim' },
 
+  { src = 'https://github.com/coder/claudecode.nvim' },
+
   { src = 'https://github.com/folke/snacks.nvim' },
 
   -- themes

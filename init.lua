@@ -39,7 +39,7 @@ require 'kickstart.plugins.indent_line'
 require 'kickstart.plugins.autopairs'
 require 'kickstart.plugins.neo-tree'
 
-require('guess-indent').setup {}
+require 'custom.plugins.guess-indent'
 
 require 'custom.plugins.crates'
 require 'custom.plugins.diffview'
@@ -54,6 +54,7 @@ require 'custom.plugins.roslyn'
 require 'custom.plugins.rustaceannvim'
 require 'custom.plugins.scrolleof'
 require 'custom.plugins.sidekick'
+require 'custom.plugins.claudecode'
 require 'custom.plugins.swift'
 require 'custom.plugins.toggleterm'
 require 'custom.plugins.trouble'

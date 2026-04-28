@@ -9,54 +9,65 @@ vim.keymap.set('n', '<leader>xw', function()
     return
   end
 
-  local cmd, efm
+  local argv, efm, path_pattern
   if vim.fs.find('tsconfig.json', { path = root, limit = 1 })[1] then
-    cmd = 'npx tsc --noEmit --pretty false'
+    argv = { 'npx', 'tsc', '--noEmit', '--pretty', 'false' }
     efm = '%f(%l\\,%c): error %m,%f(%l\\,%c): warning %m'
+    -- tsc paths look like `src/foo.ts(12,3): error TS...`
+    path_pattern = '^[^/].-%(%d+,%d+%):'
   elseif vim.fs.find(function(name) return name:match('%.csproj$') or name:match('%.sln$') end, { path = root, limit = 1 })[1] then
-    cmd = 'dotnet build --no-restore --nologo'
+    argv = { 'dotnet', 'build', '--no-restore', '--nologo' }
     efm = '%f(%l\\,%c): error %m,%f(%l\\,%c): warning %m'
+    path_pattern = '^[^/].-%(%d+,%d+%):'
   elseif vim.fs.find('Cargo.toml', { path = root, limit = 1 })[1] then
-    cmd = 'cargo check --message-format=short 2>&1'
+    argv = { 'cargo', 'check', '--message-format=short' }
     efm = '%f:%l:%c: %m'
+    path_pattern = '^[^/].-:%d+:%d+:'
   elseif vim.fs.find('Package.swift', { path = root, limit = 1 })[1] then
-    cmd = 'swift build 2>&1'
+    argv = { 'swift', 'build' }
     efm = '%f:%l:%c: %m'
+    path_pattern = '^[^/].-:%d+:%d+:'
   elseif vim.fs.find('go.mod', { path = root, limit = 1 })[1] then
-    cmd = 'go build ./... 2>&1'
+    argv = { 'go', 'build', './...' }
     efm = '%f:%l:%c: %m'
+    path_pattern = '^[^/].-:%d+:%d+:'
   end
 
-  vim.notify('Running: ' .. cmd, vim.log.levels.INFO)
-  local output = vim.fn.systemlist('cd ' .. vim.fn.shellescape(root) .. ' && ' .. cmd)
+  local title = table.concat(argv, ' ')
+  vim.notify('Running: ' .. title, vim.log.levels.INFO)
 
-  -- Make relative paths absolute so quickfix jumps work regardless of cwd
-  for i, line in ipairs(output) do
-    if not line:match('^/') and line:match('^[%w%.]+') then
-      output[i] = root .. '/' .. line
+  vim.system(argv, { cwd = root, text = true }, function(obj)
+    local lines = {}
+    for line in ((obj.stdout or '') .. '\n' .. (obj.stderr or '')):gmatch('[^\n]+') do
+      if line:match(path_pattern) then
+        line = root .. '/' .. line
+      end
+      table.insert(lines, line)
     end
-  end
 
-  vim.fn.setqflist({}, ' ', { title = cmd, lines = output, efm = efm })
-  vim.cmd('copen')
+    vim.schedule(function()
+      vim.fn.setqflist({}, ' ', { title = title, lines = lines, efm = efm })
+      vim.cmd('copen')
+    end)
+  end)
 end, { desc = 'Workspace type-check (project-aware)' })
 vim.keymap.set('n', ']d', function()
-  vim.diagnostic.jump { count = 1 }
+  vim.diagnostic.jump { count = 1, float = true }
 end, { desc = 'Go to next diagnostic' })
 vim.keymap.set('n', '[d', function()
-  vim.diagnostic.jump { count = -1 }
+  vim.diagnostic.jump { count = -1, float = true }
 end, { desc = 'Go to previous diagnostic' })
 vim.keymap.set('n', ']e', function()
-  vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.ERROR }
+  vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.ERROR, float = true }
 end, { desc = 'Go to next error' })
 vim.keymap.set('n', '[e', function()
-  vim.diagnostic.jump { count = -1, severity = vim.diagnostic.severity.ERROR }
+  vim.diagnostic.jump { count = -1, severity = vim.diagnostic.severity.ERROR, float = true }
 end, { desc = 'Go to previous error' })
 vim.keymap.set('n', ']w', function()
-  vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.WARN }
+  vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.WARN, float = true }
 end, { desc = 'Go to next warning' })
 vim.keymap.set('n', '[w', function()
-  vim.diagnostic.jump { count = -1, severity = vim.diagnostic.severity.WARN }
+  vim.diagnostic.jump { count = -1, severity = vim.diagnostic.severity.WARN, float = true }
 end, { desc = 'Go to previous warning' })
 
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
