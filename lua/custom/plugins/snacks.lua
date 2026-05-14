@@ -3,6 +3,12 @@ Snacks.setup {
     lazygit = { enabled = true },
     terminal = { enabled = true },
     toggle = { enabled = true },
+    notifier = {
+        enabled = true,
+        timeout = 5000,
+        style = 'compact',
+        top_down = true,
+    },
     picker = {
         enabled = true,
         ui_select = true,

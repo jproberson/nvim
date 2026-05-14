@@ -51,8 +51,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
     if supports(vim.lsp.protocol.Methods.textDocument_codeLens) and vim.lsp.codelens then
       map('<leader>cc', vim.lsp.codelens.run, 'Run Codelens', { 'n', 'v' })
-      map('<leader>cC', vim.lsp.codelens.refresh, 'Refresh & Display Codelens')
-      vim.lsp.codelens.refresh()
+      map('<leader>cC', function() vim.lsp.codelens.enable(true, { bufnr = event.buf }) end, 'Refresh & Display Codelens')
+      vim.lsp.codelens.enable(true, { bufnr = event.buf })
     end
 
     if supports(vim.lsp.protocol.Methods.textDocument_documentHighlight) then

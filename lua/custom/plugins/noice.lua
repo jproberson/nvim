@@ -99,6 +99,12 @@ require('noice').setup {
       size = { width = 60, height = 10 },
       border = { style = 'rounded' },
     },
+    -- Default is 5s; bump so one-time messages like Copilot device codes
+    -- stay long enough to read. Use :Noice or :Noice last to recall any
+    -- that still time out.
+    notify = {
+      timeout = 15000,
+    },
   },
 }
 
@@ -118,3 +124,4 @@ vim.keymap.set('n', '<leader>nd', function() require('noice').cmd 'dismiss' end,
 vim.keymap.set('n', '<leader>nh', function() require('noice').cmd 'history' end, { desc = 'Noice History' })
 vim.keymap.set('n', '<leader>nl', function() require('noice').cmd 'last' end, { desc = 'Noice Last Message' })
 vim.keymap.set('n', '<leader>ne', function() require('noice').cmd 'errors' end, { desc = 'Noice Errors' })
+vim.keymap.set('n', '<leader>nN', function() Snacks.notifier.show_history() end, { desc = 'Notifier History (Snacks)' })

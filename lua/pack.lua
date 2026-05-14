@@ -41,8 +41,7 @@ vim.pack.add({
 
   { src = 'https://github.com/echasnovski/mini.nvim' },
 
-  -- pinned to master: the default `main` branch is a rewrite with a different API.
-  { src = 'https://github.com/nvim-treesitter/nvim-treesitter', version = 'master' },
+  { src = 'https://github.com/nvim-treesitter/nvim-treesitter', version = 'main' },
 
   { src = 'https://github.com/mfussenegger/nvim-dap' },
   { src = 'https://github.com/rcarriga/nvim-dap-ui' },
